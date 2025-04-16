@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Editor from '@/components/Editor';
 
 export default function NewPost() {
   const router = useRouter();
@@ -55,13 +56,7 @@ export default function NewPost() {
             <label htmlFor="content" className="block text-sm font-medium mb-2">
               내용
             </label>
-            <textarea
-              id="content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full p-2 border rounded h-64"
-              required
-            />
+            <Editor content={content} onChange={setContent} />
           </div>
           
           <div className="flex gap-4">

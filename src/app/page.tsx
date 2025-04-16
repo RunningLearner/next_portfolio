@@ -29,24 +29,24 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">포트폴리오 블로그</h1>
+      <div className="container mx-auto max-w-2xl">
+        <h1 className="text-4xl font-bold mb-8 text-center">포트폴리오 블로그</h1>
         
-        <div className="mb-8">
+        <div className="mb-8 text-center">
           <Link 
             href="/posts/new"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors inline-block"
           >
             새 글 작성
           </Link>
         </div>
 
-        <div className="grid gap-6">
+        <div className="space-y-6">
           {posts.map((post) => (
             <Link 
               key={post.id} 
               href={`/posts/${post.id}`}
-              className="block p-6 border rounded-lg hover:bg-gray-50"
+              className="block p-6 border rounded-lg hover:bg-gray-50 transition-colors"
             >
               <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
               <div className="text-gray-500 mb-4">
