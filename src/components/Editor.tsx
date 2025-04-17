@@ -7,7 +7,6 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
-import YouTube from '@tiptap/extension-youtube';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -33,9 +32,6 @@ const Editor = ({ content, onChange }: EditorProps) => {
         types: ['heading', 'paragraph'],
       }),
       Underline,
-      YouTube.configure({
-        controls: true,
-      }),
     ],
     content,
     onUpdate: ({ editor }) => {

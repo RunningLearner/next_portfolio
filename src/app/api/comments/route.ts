@@ -13,10 +13,17 @@ export async function GET(request: NextRequest) {
     const comments = await prisma.comment.findMany({
       where: {
         postId: parseInt(postId),
+        parentCommentId: null,
       },
       orderBy: {
         created_at: 'desc',
       },
+      include: {
+        replies: {                  // 대댓글까지 함께 조회
+          orderBy: { created_at: 'asc' },
+        },
+      },
+
     });
 
     return NextResponse.json(comments);
@@ -31,7 +38,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { postId, content } = await request.json();
+    const { postId, content, parentCommentId } = await request.json();
 
     if (!postId || !content) {
       return NextResponse.json(
@@ -40,12 +47,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const comment = await prisma.comment.create({
-      data: {
-        content,
-        postId: parseInt(postId),
-      },
-    });
+    const data: any = {
+      content,
+      post: { connect: { id: parseInt(postId) } },
+    };
+
+    // parentCommentId가 넘어오면 대댓글로 처리
+    if (parentCommentId) {
+      data.parentComment = { connect: { id: parseInt(parentCommentId) } };
+    }
+
+    const comment = await prisma.comment.create({ data });
 
     return NextResponse.json(comment);
   } catch (error) {

@@ -1,0 +1,161 @@
+{
+  "tables": {
+    "Post": {
+      "name": "Post",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "default": "autoincrement()",
+          "notNull": true,
+          "unique": true,
+          "primary": true,
+          "comment": null,
+          "check": null
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "default": null,
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "default": null,
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "image_path": {
+          "name": "image_path",
+          "type": "text",
+          "default": null,
+          "notNull": false,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "video_path": {
+          "name": "video_path",
+          "type": "text",
+          "default": null,
+          "notNull": false,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3)",
+          "default": "now()",
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3)",
+          "default": null,
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        }
+      },
+      "comment": null,
+      "indexes": {
+        "Post_pkey": {
+          "name": "Post_pkey",
+          "unique": true,
+          "columns": [
+            "id"
+          ],
+          "type": ""
+        }
+      },
+      "constraints": {}
+    },
+    "Comment": {
+      "name": "Comment",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "default": "autoincrement()",
+          "notNull": true,
+          "unique": true,
+          "primary": true,
+          "comment": null,
+          "check": null
+        },
+        "content": {
+          "name": "content",
+          "type": "text",
+          "default": null,
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "postId": {
+          "name": "postId",
+          "type": "integer",
+          "default": null,
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3)",
+          "default": "now()",
+          "notNull": true,
+          "unique": false,
+          "primary": false,
+          "comment": null,
+          "check": null
+        }
+      },
+      "comment": null,
+      "indexes": {
+        "Comment_pkey": {
+          "name": "Comment_pkey",
+          "unique": true,
+          "columns": [
+            "id"
+          ],
+          "type": ""
+        }
+      },
+      "constraints": {}
+    }
+  },
+  "relationships": {
+    "CommentToPost": {
+      "name": "CommentToPost",
+      "primaryTableName": "Post",
+      "primaryColumnName": "id",
+      "foreignTableName": "Comment",
+      "foreignColumnName": "postId",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    }
+  },
+  "tableGroups": {}
+}

@@ -21,7 +21,7 @@ model Post {
   video_path String?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  comments   Comment[]
+  comments   Comment[] // 최상위 댓글들
 }
 
 model Comment {
@@ -29,5 +29,10 @@ model Comment {
   content    String
   postId     Int
   post       Post     @relation(fields: [postId], references: [id])
+
+  parentCommentId Int?       // 부모 댓글의 ID (없으면 최상위 댓글)
+  parentComment   Comment?   @relation("CommentReplies", fields: [parentCommentId], references: [id])
+  replies         Comment[]  @relation("CommentReplies")      // 이 댓글에 딸린 대댓글들
+
   created_at DateTime @default(now())
 }
