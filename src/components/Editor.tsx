@@ -8,7 +8,6 @@ import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
 
 interface EditorProps {
   content: string;
@@ -80,6 +79,8 @@ const Editor = ({ content, onChange }: EditorProps) => {
 
   const handleDrop = async (event: React.DragEvent) => {
     event.preventDefault();
+    setIsUploading(true);
+
     const files = event.dataTransfer.files;
 
     for (let i = 0; i < files.length; i++) {
@@ -90,45 +91,9 @@ const Editor = ({ content, onChange }: EditorProps) => {
         await handleVideoUpload(file);
       }
     }
+
+    setIsUploading(false);
   };
-
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        const markdown = file.type.startsWith('image/') 
-          ? `![${file.name}](${data.path})`
-          : `[${file.name}](${data.path})`;
-        
-        editor?.chain().focus().insertContent(markdown).run();
-      }
-    } catch (error) {
-      console.error('파일 업로드 실패:', error);
-    } finally {
-      setIsUploading(false);
-    }
-  }, [editor]);
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
-      'video/*': ['.mp4', '.webm'],
-    },
-    noClick: true,
-  });
 
   const addLink = useCallback(() => {
     const url = window.prompt('URL을 입력하세요');
@@ -143,6 +108,7 @@ const Editor = ({ content, onChange }: EditorProps) => {
 
   return (
     <div className="border rounded-lg p-4">
+      {/* 툴바 */}
       <div className="flex gap-2 mb-4">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -170,13 +136,12 @@ const Editor = ({ content, onChange }: EditorProps) => {
         </button>
       </div>
 
+      {/* 에디터 콘텐츠 영역 (네이티브 드롭 이벤트 사용) */}
       <div
-        {...getRootProps()}
-        className="min-h-[300px] prose max-w-none"
+        className="min-h-[300px] prose max-w-none relative"
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
-        <input {...getInputProps()} />
         <EditorContent editor={editor} />
         {isUploading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-50">
